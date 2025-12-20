@@ -3,12 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Debug logging to see what environment variables are available
-console.log('Redis Environment variables:');
-console.log('REDIS_URL:', process.env.REDIS_URL);
-console.log('REDIS_HOST:', process.env.REDIS_HOST);
-console.log('REDIS_PORT:', process.env.REDIS_PORT);
-
 const redisConfig = {
   ttl: parseInt(process.env.REDIS_TTL || '300', 10), // 5 minutes default TTL
 };
