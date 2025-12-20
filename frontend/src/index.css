@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 222 47% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 47% 14%;
+    --muted-foreground: 215 20% 55%;
+
+    --accent: 222 47% 16%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 47% 18%;
+    --input: 222 47% 14%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.625rem;
+
+    /* Pokemon Type Colors */
+    --type-normal: 48 10% 58%;
+    --type-fire: 25 98% 54%;
+    --type-water: 221 82% 55%;
+    --type-electric: 48 95% 55%;
+    --type-grass: 100 50% 45%;
+    --type-ice: 180 50% 65%;
+    --type-fighting: 0 65% 45%;
+    --type-poison: 280 60% 50%;
+    --type-ground: 40 50% 45%;
+    --type-flying: 255 80% 70%;
+    --type-psychic: 340 80% 60%;
+    --type-bug: 75 60% 40%;
+    --type-rock: 45 40% 38%;
+    --type-ghost: 265 50% 45%;
+    --type-dragon: 260 80% 55%;
+    --type-dark: 0 0% 30%;
+    --type-steel: 220 15% 60%;
+    --type-fairy: 330 60% 65%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(260 80% 55%));
+    --gradient-card: linear-gradient(145deg, hsl(222 47% 10%), hsl(222 47% 6%));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(217 91% 60% / 0.15), transparent 70%);
+
+    /* Shadows */
+    --shadow-card: 0 4px 24px -4px hsl(222 47% 4% / 0.5);
+    --shadow-glow: 0 0 40px -10px hsl(217 91% 60% / 0.3);
+
+    /* Sidebar */
+    --sidebar-background: 222 47% 7%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 47% 12%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 47% 16%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  code, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+  }
+
+  .card-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 3px;
+  }
+}
+
+/* Type badge styles */
+.type-normal { background-color: hsl(var(--type-normal)); }
+.type-fire { background-color: hsl(var(--type-fire)); }
+.type-water { background-color: hsl(var(--type-water)); }
+.type-electric { background-color: hsl(var(--type-electric)); color: hsl(222 47% 6%); }
+.type-grass { background-color: hsl(var(--type-grass)); }
+.type-ice { background-color: hsl(var(--type-ice)); color: hsl(222 47% 6%); }
+.type-fighting { background-color: hsl(var(--type-fighting)); }
+.type-poison { background-color: hsl(var(--type-poison)); }
+.type-ground { background-color: hsl(var(--type-ground)); }
+.type-flying { background-color: hsl(var(--type-flying)); }
+.type-psychic { background-color: hsl(var(--type-psychic)); }
+.type-bug { background-color: hsl(var(--type-bug)); }
+.type-rock { background-color: hsl(var(--type-rock)); }
+.type-ghost { background-color: hsl(var(--type-ghost)); }
+.type-dragon { background-color: hsl(var(--type-dragon)); }
+.type-dark { background-color: hsl(var(--type-dark)); }
+.type-steel { background-color: hsl(var(--type-steel)); }
+.type-fairy { background-color: hsl(var(--type-fairy)); }
