@@ -10,12 +10,16 @@ const sequelize = process.env.DATABASE_URL
   : new Sequelize(
       process.env.DB_NAME || "pokedex",
       process.env.DB_USER || "postgres",
-      process.env.DB_PASS || "postgres",
+      process.env.DB_PASS || "postgres", // Default password for local dev
       {
         host: process.env.DB_HOST || "localhost",
         port: parseInt(process.env.DB_PORT || "5432", 10),
         dialect: "postgres" as const,
         logging: process.env.NODE_ENV === "development" ? console.log : false,
+        // Handle case where DB_PASS is not set (Render sync: false)
+        ...(process.env.DB_PASS === undefined && {
+          password: undefined
+        })
       }
     );
 

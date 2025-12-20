@@ -15,29 +15,19 @@ services:
       - key: CORS_ORIGIN
         value: https://pokedex-frontend.onrender.com
       - key: DB_HOST
-        fromDatabase:
-          name: pokedex-db
-          property: host
+        value: pokedex-db
       - key: DB_PORT
-        fromDatabase:
-          name: pokedex-db
-          property: port
+        value: "5432"
       - key: DB_NAME
         value: pokedex
       - key: DB_USER
         value: postgres
       - key: DB_PASS
-        fromDatabase:
-          name: pokedex-db
-          property: password
+        sync: false
       - key: REDIS_HOST
-        fromService:
-          name: pokedex-cache
-          property: host
+        value: pokedex-cache
       - key: REDIS_PORT
-        fromService:
-          name: pokedex-cache
-          property: port
+        value: "6379"
 
   # PostgreSQL Database
   - type: pserv
