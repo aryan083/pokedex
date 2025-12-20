@@ -32,6 +32,15 @@ const pokemonController = new PokemonController(pokemonService);
 // Routes
 app.use('/api/pokemon', pokemonRoutes(pokemonController));
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'PokéDex API is running!',
+    version: '1.0.0',
+    documentation: '/api/pokemon'
+  });
+});
+
 // Health check route
 app.get('/health', (req, res) => {
   res.status(200).json({
