@@ -108,6 +108,8 @@ npm run fetch-seed
 npm start
 ```
 
+> **Note:** Seeding takes 2-3 hours for all 1350+ Pokémon. For quicker testing, use `npm run fetch-seed 151` to seed only first generation.
+
 3. **Start the frontend**
 ```bash
 cd frontend
@@ -132,11 +134,13 @@ docker exec pokedex-backend npm run fetch-seed
 # Access at http://localhost:5174
 ```
 
+> **Note:** Seeding takes 2-3 hours for all 1350+ Pokémon. For quicker testing, use `docker exec pokedex-backend npm run fetch-seed 151` to seed only first generation.
+
 ## 📡 API Documentation
 
 ### Base URL
 ```
-Production: https://your-backend.onrender.com/api
+Production: https://pokedex-15jr.onrender.com/api
 Development: http://localhost:3000/api
 ```
 
@@ -197,7 +201,7 @@ curl "http://localhost:3000/api/pokemon?search=pikachu&type=electric&sortBy=atta
 1. Push your code to GitHub
 2. Connect your repo to Vercel
 3. Set environment variable:
-   - `VITE_API_BASE_URL` = `https://your-backend.onrender.com/api`
+   - `VITE_API_BASE_URL` = `https://pokedex-15jr.onrender.com/api`
 4. Deploy!
 
 ### Deploy Backend to Render
@@ -212,7 +216,7 @@ curl "http://localhost:3000/api/pokemon?search=pikachu&type=electric&sortBy=atta
      - `NODE_ENV=production`
      - `DATABASE_URL=<your-postgres-url>`
      - `REDIS_URL=<your-redis-url>`
-     - `CORS_ORIGIN=https://your-frontend.vercel.app`
+     - `CORS_ORIGIN=https://pokedex-g8h5luclr-aryan083s-projects.vercel.app`
      - `PORT=3000`
 5. Create PostgreSQL and Redis add-ons
 6. Deploy and seed: `npm run fetch-seed`
@@ -306,5 +310,7 @@ Contact: anish.sarkar@redingle.com
 ---
 
 **Submission Date:** 2025-12-20  
-**Demo Link:** [Your Deployed Link]  
+**Demo Links:**  
+- Frontend: https://pokedex-g8h5luclr-aryan083s-projects.vercel.app/  
+- Backend API: https://pokedex-15jr.onrender.com/api  
 **Repository:** https://github.com/aryan083/pokedex
