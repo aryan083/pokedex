@@ -5,8 +5,8 @@ services:
     env: docker
     plan: free
     region: ohio
-    dockerfilePath: ./Dockerfile
-    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
     envVars:
       - key: NODE_ENV
         value: production
