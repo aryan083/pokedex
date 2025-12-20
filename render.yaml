@@ -15,16 +15,18 @@ services:
       - key: CORS_ORIGIN
         value: https://pokedex-frontend.onrender.com
       - key: DB_HOST
-        value: YOUR_POSTGRES_HOST_HERE
+        value: YOUR_AIVEN_POSTGRES_HOST
       - key: DB_PORT
-        value: "5432"
+        value: "YOUR_AIVEN_POSTGRES_PORT"
       - key: DB_NAME
-        value: YOUR_DB_NAME_HERE
+        value: YOUR_AIVEN_DB_NAME
       - key: DB_USER
-        value: YOUR_DB_USER_HERE
+        value: YOUR_AIVEN_USERNAME
       - key: DB_PASS
-        value: YOUR_DB_PASSWORD_HERE
+        value: YOUR_AIVEN_PASSWORD
       - key: REDIS_HOST
-        value: YOUR_REDIS_HOST_HERE
+        value: YOUR_REDIS_LABS_HOST
       - key: REDIS_PORT
-        value: "6379"
+        value: "YOUR_REDIS_LABS_PORT"
+      - key: REDIS_PASS
+        value: YOUR_REDIS_LABS_PASSWORD

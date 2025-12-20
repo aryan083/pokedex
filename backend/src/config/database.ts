@@ -6,6 +6,15 @@ dotenv.config();
 const sequelize = process.env.DATABASE_URL 
   ? new Sequelize(process.env.DATABASE_URL, {
       logging: process.env.NODE_ENV === "development" ? console.log : false,
+      // Add SSL options if needed for production
+      ...(process.env.DB_SSL_CA && {
+        dialectOptions: {
+          ssl: {
+            require: true,
+            ca: process.env.DB_SSL_CA,
+          }
+        }
+      })
     })
   : new Sequelize(
       process.env.DB_NAME || "pokedex",
@@ -16,6 +25,15 @@ const sequelize = process.env.DATABASE_URL
         port: parseInt(process.env.DB_PORT || "5432", 10),
         dialect: "postgres" as const,
         logging: process.env.NODE_ENV === "development" ? console.log : false,
+        // Add SSL options if needed for production
+        ...(process.env.DB_SSL_CA && {
+          dialectOptions: {
+            ssl: {
+              require: true,
+              ca: process.env.DB_SSL_CA,
+            }
+          }
+        })
       }
     );
 

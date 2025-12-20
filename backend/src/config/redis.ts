@@ -13,6 +13,7 @@ export const redisClient = process.env.REDIS_URL
   : new Redis({
       host: process.env.REDIS_HOST || '127.0.0.1',
       port: parseInt(process.env.REDIS_PORT || '6379', 10),
+      username: process.env.REDIS_USER || 'default',
       // Add password if provided
       ...(process.env.REDIS_PASS && { password: process.env.REDIS_PASS }),
     });
