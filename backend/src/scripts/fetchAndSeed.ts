@@ -158,8 +158,13 @@ const seedDatabase = async (limit: number = 151) => {
   }
 };
 
+// Export the seedDatabase function for use in the API
+export { seedDatabase };
+
 // Get limit from command line arguments or default to 10000 (fetch all available)
 const limit = process.argv[2] ? parseInt(process.argv[2], 10) : 10000;
 
 // Run the seeder
-seedDatabase(limit);
+if (require.main === module) {
+  seedDatabase(limit);
+}

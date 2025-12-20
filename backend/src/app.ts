@@ -41,6 +41,18 @@ app.get('/', (req, res) => {
   });
 });
 
+// Temporary seed endpoint (remove after seeding)
+app.post('/seed', async (req, res) => {
+  try {
+    // Import the seed function dynamically
+    const { seedDatabase } = await import('./scripts/fetchAndSeed');
+    await seedDatabase(10000); // Seed all available Pokémon
+    res.json({ message: 'Seeding completed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Seeding failed', details: (error as Error).message });
+  }
+});
+
 // Health check route
 app.get('/health', (req, res) => {
   res.status(200).json({
