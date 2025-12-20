@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Use DATABASE_URL if provided (Render format), otherwise use individual variables
+// Use DATABASE_URL if provided, otherwise use individual variables
 const sequelize = process.env.DATABASE_URL 
   ? new Sequelize(process.env.DATABASE_URL, {
       logging: process.env.NODE_ENV === "development" ? console.log : false,
@@ -16,10 +16,6 @@ const sequelize = process.env.DATABASE_URL
         port: parseInt(process.env.DB_PORT || "5432", 10),
         dialect: "postgres" as const,
         logging: process.env.NODE_ENV === "development" ? console.log : false,
-        // Handle case where DB_PASS is not set (Render sync: false)
-        ...(process.env.DB_PASS === undefined && {
-          password: undefined
-        })
       }
     );
 
