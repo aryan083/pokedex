@@ -15,12 +15,12 @@ graph TD
     C --> E[(Redis Cache)]
     F[PokeAPI] --> C
     
-    style A fill:#FFE4C4,stroke:#333
-    style B fill:#87CEEB,stroke:#333
-    style C fill:#98FB98,stroke:#333
-    style D fill:#FFB6C1,stroke:#333
-    style E fill:#DDA0DD,stroke:#333
-    style F fill:#FFA07A,stroke:#333
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#DDA0DD,stroke:#333,color:#000
+    style F fill:#FFA07A,stroke:#333,color:#000
 ```
 
 ##### Backend Component Architecture
@@ -35,15 +35,15 @@ graph LR
     G --> H[(PostgreSQL)]
     E --> I[Redis Cache]
     
-    style A fill:#98FB98
-    style B fill:#87CEFA
-    style C fill:#87CEFA
-    style D fill:#87CEFA
-    style E fill:#87CEFA
-    style F fill:#87CEFA
-    style G fill:#FFB6C1
-    style H fill:#FFB6C1
-    style I fill:#DDA0DD
+    style A fill:#98FB98,stroke:#333,color:#000
+    style B fill:#87CEFA,stroke:#333,color:#000
+    style C fill:#87CEFA,stroke:#333,color:#000
+    style D fill:#87CEFA,stroke:#333,color:#000
+    style E fill:#87CEFA,stroke:#333,color:#000
+    style F fill:#87CEFA,stroke:#333,color:#000
+    style G fill:#FFB6C1,stroke:#333,color:#000
+    style H fill:#FFB6C1,stroke:#333,color:#000
+    style I fill:#DDA0DD,stroke:#333,color:#000
 ```
 
 1. **Frontend Layer** (React + TypeScript)
@@ -88,16 +88,16 @@ graph TD
     E --> J[Global Users]
     G --> J
     
-    style A fill:#FFE4C4,stroke:#333
-    style B fill:#87CEEB,stroke:#333
-    style C fill:#98FB98,stroke:#333
-    style D fill:#DDA0DD,stroke:#333
-    style E fill:#FFB6C1,stroke:#333
-    style F fill:#87CEFA,stroke:#333
-    style G fill:#FFA07A,stroke:#333
-    style H fill:#FF6347,stroke:#333
-    style I fill:#DDA0DD,stroke:#333
-    style J fill:#98FB98,stroke:#333
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#DDA0DD,stroke:#333,color:#000
+    style E fill:#FFB6C1,stroke:#333,color:#000
+    style F fill:#87CEFA,stroke:#333,color:#000
+    style G fill:#FFA07A,stroke:#333,color:#000
+    style H fill:#FF6347,stroke:#333,color:#000
+    style I fill:#DDA0DD,stroke:#333,color:#000
+    style J fill:#98FB98,stroke:#333,color:#000
 ```
 
 ### Design
@@ -126,7 +126,7 @@ erDiagram
         tsvector search_text
     }
     
-    style POKEMONS fill:#FFB6C1,stroke:#333
+    style POKEMONS fill:#FFB6C1,stroke:#333,color:#000
 ```
 
 ##### Table Schema
@@ -194,12 +194,12 @@ graph LR
     C --> H[Stat Sliders]
     C --> I[Generation Filter]
     
-    style A fill:#FFE4C4
-    style B fill:#87CEEB
-    style C fill:#98FB98
-    style D fill:#FFB6C1
-    style E fill:#DDA0DD
-    style F fill:#FFA07A
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#DDA0DD,stroke:#333,color:#000
+    style F fill:#FFA07A,stroke:#333,color:#000
 ```
 
 Modern, responsive interface with:
@@ -245,19 +245,19 @@ graph LR
     E --> M[Frontend Display]
     L --> M
     
-    style A fill:#FFE4C4
-    style B fill:#87CEEB
-    style C fill:#98FB98
-    style D fill:#DDA0DD
-    style E fill:#FFB6C1
-    style F fill:#87CEFA
-    style G fill:#FFA07A
-    style H fill:#98FB98
-    style I fill:#DDA0DD
-    style J fill:#87CEEB
-    style K fill:#FFB6C1
-    style L fill:#FF6347
-    style M fill:#FFE4C4
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#DDA0DD,stroke:#333,color:#000
+    style E fill:#FFB6C1,stroke:#333,color:#000
+    style F fill:#87CEFA,stroke:#333,color:#000
+    style G fill:#FFA07A,stroke:#333,color:#000
+    style H fill:#98FB98,stroke:#333,color:#000
+    style I fill:#DDA0DD,stroke:#333,color:#000
+    style J fill:#87CEEB,stroke:#333,color:#000
+    style K fill:#FFB6C1,stroke:#333,color:#000
+    style L fill:#FF6347,stroke:#333,color:#000
+    style M fill:#FFE4C4,stroke:#333,color:#000
 ```
 
 #### Performance Optimizations
@@ -296,20 +296,20 @@ graph LR
     G --> N
     M --> N
     
-    style A fill:#FFE4C4
-    style B fill:#87CEEB
-    style C fill:#98FB98
-    style D fill:#FFB6C1
-    style E fill:#87CEFA
-    style F fill:#DDA0DD
-    style G fill:#FFA07A
-    style H fill:#98FB98
-    style I fill:#FFB6C1
-    style J fill:#87CEEB
-    style K fill:#DDA0DD
-    style L fill:#FF6347
-    style M fill:#98FB98
-    style N fill:#FFE4C4
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#87CEFA,stroke:#333,color:#000
+    style F fill:#DDA0DD,stroke:#333,color:#000
+    style G fill:#FFA07A,stroke:#333,color:#000
+    style H fill:#98FB98,stroke:#333,color:#000
+    style I fill:#FFB6C1,stroke:#333,color:#000
+    style J fill:#87CEEB,stroke:#333,color:#000
+    style K fill:#DDA0DD,stroke:#333,color:#000
+    style L fill:#FF6347,stroke:#333,color:#000
+    style M fill:#98FB98,stroke:#333,color:#000
+    style N fill:#FFE4C4,stroke:#333,color:#000
 ```
 
 #### Error Handling & Observability
@@ -351,14 +351,14 @@ graph LR
     D --> G[Redis Cache]
     G --> H[Cache Invalidation]
     
-    style A fill:#FFA07A
-    style B fill:#87CEFA
-    style C fill:#98FB98
-    style D fill:#FFB6C1
-    style E fill:#DDA0DD
-    style F fill:#FFE4C4
-    style G fill:#87CEEB
-    style H fill:#FF6347
+    style A fill:#FFA07A,stroke:#333,color:#000
+    style B fill:#87CEFA,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#DDA0DD,stroke:#333,color:#000
+    style F fill:#FFE4C4,stroke:#333,color:#000
+    style G fill:#87CEEB,stroke:#333,color:#000
+    style H fill:#FF6347,stroke:#333,color:#000
 ```
 
 ### Key Features Implementation
