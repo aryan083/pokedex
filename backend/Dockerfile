@@ -7,14 +7,14 @@ RUN apk add --no-cache curl
 # Set working directory
 WORKDIR /app
 
-# Copy backend package files
-COPY backend/package*.json ./
+# Copy package files
+COPY package*.json ./
 
 # Install all dependencies including dev dependencies for building
 RUN npm ci
 
-# Copy backend source code
-COPY backend/. ./
+# Copy source code
+COPY . ./
 
 # Build TypeScript
 RUN npm run build
@@ -26,8 +26,8 @@ RUN npm prune --production
 EXPOSE 3000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3000/healthz || exit 1
 
 # Start the application
 CMD ["npm", "start"]

@@ -11,12 +11,41 @@ This project is a full-stack PokéDex application built for the Intern - Develop
 
 - ✅ **Complete Pokémon Database** - All 1350+ Pokémon from PokeAPI
 - ✅ **Full-Text Search** - Fast PostgreSQL-based text search
-- ✅ **Semantic Search** - Intelligent search using type-based filtering
+- ✅ **Semantic Search** - Hybrid semantic search (vector + text) with graceful fallback
 - ✅ **Advanced Filtering** - Filter by type, generation, and stats
 - ✅ **Redis Caching** - Optimized performance with 5-minute cache
 - ✅ **Infinite Scroll** - Smooth pagination with 20 items per page
 - ✅ **Responsive Design** - Mobile-first UI with Tailwind CSS
 - ✅ **Docker Deployment** - Containerized for easy deployment
+
+## 🔎 Vector Semantic Search (pgvector)
+
+This project includes a production-grade semantic search path powered by PostgreSQL **pgvector**.
+
+### How it works
+
+- **Embeddings**: Hugging Face `sentence-transformers/all-MiniLM-L6-v2` (384 dimensions)
+- **Storage**: PostgreSQL vector columns on `pokemons`
+- **Query**: cosine similarity, with hybrid scoring (vector + text) and filter integration
+- **Fallback**: if embeddings are unavailable (missing API key), the API falls back to non-vector search
+
+### Examples
+
+- Queries like `flame type` return Fire-type Pokémon via semantic similarity.
+
+### Embedding lifecycle
+
+- **Generate / backfill embeddings** (after seeding):
+```bash
+cd backend
+npm run generate-embeddings
+```
+
+- **Smoke test API**:
+```bash
+cd backend
+npm run smoke-test
+```
 
 ## 🏗️ Architecture
 
