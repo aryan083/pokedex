@@ -11,6 +11,8 @@ import { PokemonRepositoryImpl } from './repositories/pokemon.repository';
 import { SearchService } from './services/search.service';
 import { RedisCache } from './cache/redisCache';
 import { logger } from './middlewares/requestLogger.middleware';
+import { EmbeddingService } from './services/embedding.service';
+import { VectorSearchService } from './services/vector-search.service';
 
 // Create Express app
 const app = express();
@@ -72,6 +74,45 @@ app.post('/update-database', async (req, res) => {
     res.status(500).json({ 
       error: 'Database update failed', 
       details: error.message 
+    });
+  }
+});
+
+app.post('/update-database-with-embeddings', async (req, res) => {
+  try {
+    const expectedToken = process.env.ADMIN_TOKEN;
+    const providedToken = req.header('x-admin-token');
+    if (!expectedToken || providedToken !== expectedToken) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { seedDatabase } = await import('./scripts/fetchAndSeed');
+    const limit = req.body.limit || 10000;
+    await seedDatabase(limit);
+
+    const embeddingService = new EmbeddingService();
+    if (!embeddingService.isEnabled()) {
+      return res.status(200).json({
+        message: 'Database updated. Embeddings skipped (missing HUGGINGFACE_API_KEY).',
+      });
+    }
+
+    const vectorSearchService = new VectorSearchService(embeddingService);
+    const embeddings = await vectorSearchService.batchGenerateEmbeddings(
+      undefined,
+      5
+    );
+
+    return res.status(200).json({
+      message: 'Database updated and embeddings backfilled.',
+      seedLimit: limit,
+      embeddings,
+    });
+  } catch (error: any) {
+    logger.error(`Database update+embeddings failed: ${error.message}`);
+    return res.status(500).json({
+      error: 'Database update+embeddings failed',
+      details: error.message,
     });
   }
 });

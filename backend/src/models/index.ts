@@ -6,6 +6,8 @@ const syncDatabase = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
+
+    await sequelize.query('CREATE EXTENSION IF NOT EXISTS vector;');
     
     // Sync models
     await sequelize.sync({ alter: true });
