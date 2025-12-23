@@ -48,7 +48,7 @@ export class PokemonService {
       // Parse semantic search terms
       let filters = {};
       if (validatedParams.search) {
-        filters = this.searchService.parseSemanticSearch(validatedParams.search);
+        filters = this.searchService.parseEnhancedSemanticSearch(validatedParams.search);
       }
 
       // Merge filters with other parameters

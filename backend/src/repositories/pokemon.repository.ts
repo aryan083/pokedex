@@ -11,6 +11,7 @@ export interface PokemonFilters {
   minDefense?: number;
   minSpeed?: number;
   search?: string;
+  preferredType?: string; // For semantic fallback matching
 }
 
 // Define sorting options
@@ -134,12 +135,37 @@ export class PokemonRepositoryImpl implements PokemonRepository {
         };
       }
       
-      const { count, rows } = await Pokemon.findAndCountAll({
+      let { count, rows } = await Pokemon.findAndCountAll({
         where: finalWhere,
         order: [[sortField, sortOrder]],
         limit,
         offset,
       });
+      
+      // If no results found with text search but there's a preferred type for fallback
+      if (count === 0 && filters.preferredType && filters.search && filters.search !== filters.preferredType) {
+        logger.info(`No results found for text search "${filters.search}", trying fallback to type: ${filters.preferredType}`);
+        
+        // Try searching by the preferred type as fallback
+        const fallbackWhere = {
+          ...whereConditions, // Keep other filters like generation, stats, etc.
+          types: {
+            [Op.contains]: [filters.preferredType] // Find Pokémon with the preferred type
+          }
+        };
+        
+        const fallbackResult = await Pokemon.findAndCountAll({
+          where: fallbackWhere,
+          order: [[sortField, sortOrder]],
+          limit,
+          offset,
+        });
+        
+        count = fallbackResult.count;
+        rows = fallbackResult.rows;
+        
+        logger.info(`Fallback search returned ${count} results for type: ${filters.preferredType}`);
+      }
       
       return {
         pokemons: rows,

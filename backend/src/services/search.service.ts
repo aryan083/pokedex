@@ -47,6 +47,7 @@ export class SearchService {
     const term = searchTerm.toLowerCase().trim();
     const filters: PokemonFilters = {};
 
+    // Handle exact semantic terms
     switch (term) {
       case 'fast':
         filters.minSpeed = 100;
@@ -60,9 +61,95 @@ export class SearchService {
         filters.minDefense = undefined; // Will be set to < 70 in repository
         break;
       default:
+        // Handle multi-word queries and semantic interpretation
         filters.search = searchTerm;
     }
 
+    return filters;
+  }
+
+  // Enhanced semantic search with closest match fallback
+  parseEnhancedSemanticSearch(searchTerm: string): PokemonFilters {
+    const originalTerm = searchTerm.toLowerCase().trim();
+    const filters: PokemonFilters = {};
+
+    // Handle exact semantic terms
+    switch (originalTerm) {
+      case 'fast':
+        filters.minSpeed = 100;
+        return filters;
+      case 'tank':
+        filters.search = 'tank';
+        return filters;
+      case 'glass':
+        filters.minAttack = 100;
+        filters.minDefense = undefined; // Will be set to < 70 in repository
+        return filters;
+    }
+
+    // Tokenize the search term to handle multi-word queries
+    const tokens = originalTerm.split(/\s+/);
+    
+    // Semantic mappings for common terms
+    const semanticMappings: { [key: string]: string } = {
+      'flame': 'fire',
+      'firey': 'fire',
+      'fiery': 'fire',
+      'flaming': 'fire',
+      'aqua': 'water',
+      'watery': 'water',
+      'bubble': 'water',
+      'leaf': 'grass',
+      'plant': 'grass',
+      'bolt': 'electric',
+      'shocking': 'electric',
+      'spark': 'electric',
+      'thunder': 'electric',
+      'poisonous': 'poison',
+      'venom': 'poison',
+      'toxic': 'poison',
+      'fighter': 'fighting',
+      'battle': 'fighting',
+      'sky': 'flying',
+      'bird': 'flying',
+      'earth': 'ground',
+      'stone': 'rock',
+      'insect': 'bug',
+      'spirit': 'ghost',
+      'spooky': 'ghost',
+      'metal': 'steel',
+      'iron': 'steel',
+    };
+
+    // Check each token for semantic matches
+    let hasTypeMatch = false;
+    let matchedType = '';
+    
+    for (const token of tokens) {
+      if (semanticMappings[token]) {
+        matchedType = semanticMappings[token];
+        hasTypeMatch = true;
+        break; // Use the first type match found
+      }
+    }
+
+    // If we found a semantic type match
+    if (hasTypeMatch) {
+      // If the query also mentions 'type', it's definitely a type search
+      if (tokens.includes('type')) {
+        filters.type = matchedType;
+        return filters;
+      } else {
+        // Otherwise, try both name and type matching
+        filters.search = originalTerm;
+        // We'll handle the type fallback in the repository
+        (filters as any).preferredType = matchedType; 
+        return filters;
+      }
+    }
+
+    // If no semantic match found, return the original search term
+    filters.search = originalTerm;
     return filters;
   }
 
