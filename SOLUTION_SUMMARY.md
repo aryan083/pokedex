@@ -6,6 +6,46 @@
 #### System Design
 The PokéDex application follows a modern microservices-inspired architecture with clear separation of concerns:
 
+##### High-Level Architecture
+```mermaid
+graph TD
+    A[Client Browser] --> B[Vercel Frontend]
+    B --> C[Render Backend API]
+    C --> D[(PostgreSQL Database)]
+    C --> E[(Redis Cache)]
+    F[PokeAPI] --> C
+    
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#DDA0DD,stroke:#333,color:#000
+    style F fill:#FFA07A,stroke:#333,color:#000
+```
+
+##### Backend Component Architecture
+```mermaid
+graph LR
+    A[Express.js App] --> B[Middleware Layer]
+    A --> C[Routes]
+    C --> D[Controllers]
+    D --> E[Services]
+    E --> F[Repositories]
+    F --> G[Sequelize ORM]
+    G --> H[(PostgreSQL)]
+    E --> I[Redis Cache]
+    
+    style A fill:#98FB98,stroke:#333,color:#000
+    style B fill:#87CEFA,stroke:#333,color:#000
+    style C fill:#87CEFA,stroke:#333,color:#000
+    style D fill:#87CEFA,stroke:#333,color:#000
+    style E fill:#87CEFA,stroke:#333,color:#000
+    style F fill:#87CEFA,stroke:#333,color:#000
+    style G fill:#FFB6C1,stroke:#333,color:#000
+    style H fill:#FFB6C1,stroke:#333,color:#000
+    style I fill:#DDA0DD,stroke:#333,color:#000
+```
+
 1. **Frontend Layer** (React + TypeScript)
    - Single-page application with client-side routing
    - Component-based architecture with reusable UI elements
@@ -34,11 +74,62 @@ The PokéDex application follows a modern microservices-inspired architecture wi
 - **Cache**: Redis with automatic expiration
 - **Deployment**: Docker, Vercel (frontend), Render (backend)
 
+##### Deployment Architecture
+```mermaid
+graph TD
+    A[Developer] --> B[GitHub Repository]
+    B --> C[Vercel CI/CD]
+    B --> D[Render CI/CD]
+    C --> E[Vercel Edge Network]
+    D --> F[Docker Build]
+    F --> G[Render Web Service]
+    G --> H[Render PostgreSQL]
+    G --> I[Render Redis]
+    E --> J[Global Users]
+    G --> J
+    
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#DDA0DD,stroke:#333,color:#000
+    style E fill:#FFB6C1,stroke:#333,color:#000
+    style F fill:#87CEFA,stroke:#333,color:#000
+    style G fill:#FFA07A,stroke:#333,color:#000
+    style H fill:#FF6347,stroke:#333,color:#000
+    style I fill:#DDA0DD,stroke:#333,color:#000
+    style J fill:#98FB98,stroke:#333,color:#000
+```
+
 ### Design
 
 #### Database Schema Design
 The PostgreSQL schema is designed for optimal querying and search performance:
 
+##### Entity Relationship Diagram
+```mermaid
+erDiagram
+    POKEMONS {
+        integer id PK
+        integer pokemon_id UK
+        varchar name
+        integer generation
+        integer hp
+        integer attack
+        integer defense
+        integer special_attack
+        integer special_defense
+        integer speed
+        integer height
+        integer weight
+        text[] types
+        text[] abilities
+        tsvector search_text
+    }
+    
+    style POKEMONS fill:#FFB6C1,stroke:#333,color:#000
+```
+
+##### Table Schema
 ```sql
 CREATE TABLE pokemons (
   id SERIAL PRIMARY KEY,
@@ -90,6 +181,28 @@ Query parameters designed for flexibility:
 
 #### UI/UX Design
 Modern, responsive interface with:
+
+##### User Interface Flow
+```mermaid
+graph LR
+    A[Homepage] --> B[Search Interface]
+    B --> C[Filter Panel]
+    B --> D[Pokémon Grid]
+    D --> E[Pokémon Details Modal]
+    E --> F[Comparison Panel]
+    C --> G[Type Filters]
+    C --> H[Stat Sliders]
+    C --> I[Generation Filter]
+    
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#DDA0DD,stroke:#333,color:#000
+    style F fill:#FFA07A,stroke:#333,color:#000
+```
+
+Modern, responsive interface with:
 - Grid and list view options
 - Card sizing controls for personalization
 - Type-based color coding for visual recognition
@@ -115,6 +228,38 @@ Two-tiered search approach:
    - Stat threshold filtering for numerical attributes
    - Combined filters with AND logic for precise results
 
+##### Search Architecture
+```mermaid
+graph LR
+    A[User Search Input] --> B[Frontend]
+    B --> C[Backend API]
+    C --> D[Redis Cache]
+    D -- Cache Hit --> E[Return Cached Results]
+    D -- Cache Miss --> F[Database Query]
+    F --> G[PostgreSQL]
+    G --> H[Apply Filters]
+    H --> I[Sort Results]
+    I --> J[Paginate Results]
+    J --> K[Cache Results]
+    K --> L[Return Results]
+    E --> M[Frontend Display]
+    L --> M
+    
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#DDA0DD,stroke:#333,color:#000
+    style E fill:#FFB6C1,stroke:#333,color:#000
+    style F fill:#87CEFA,stroke:#333,color:#000
+    style G fill:#FFA07A,stroke:#333,color:#000
+    style H fill:#98FB98,stroke:#333,color:#000
+    style I fill:#DDA0DD,stroke:#333,color:#000
+    style J fill:#87CEEB,stroke:#333,color:#000
+    style K fill:#FFB6C1,stroke:#333,color:#000
+    style L fill:#FF6347,stroke:#333,color:#000
+    style M fill:#FFE4C4,stroke:#333,color:#000
+```
+
 #### Performance Optimizations
 1. **Caching Strategy**
    - Redis cache with 5-minute TTL
@@ -131,6 +276,41 @@ Two-tiered search approach:
    - Debounced search inputs to reduce API calls
    - React Query for intelligent caching and background updates
    - Code splitting for faster initial loads
+
+##### Performance Flow
+```mermaid
+graph LR
+    A[User Request] --> B[Frontend]
+    B --> C[Check React Query Cache]
+    C -- Hit --> D[Return Cached Data]
+    C -- Miss --> E[API Call]
+    E --> F[Check Redis Cache]
+    F -- Hit --> G[Return Cached Response]
+    F -- Miss --> H[Database Query]
+    H --> I[PostgreSQL]
+    I --> J[Apply Indexes]
+    J --> K[Return Results]
+    K --> L[Cache in Redis]
+    L --> M[Cache in React Query]
+    D --> N[Display]
+    G --> N
+    M --> N
+    
+    style A fill:#FFE4C4,stroke:#333,color:#000
+    style B fill:#87CEEB,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#87CEFA,stroke:#333,color:#000
+    style F fill:#DDA0DD,stroke:#333,color:#000
+    style G fill:#FFA07A,stroke:#333,color:#000
+    style H fill:#98FB98,stroke:#333,color:#000
+    style I fill:#FFB6C1,stroke:#333,color:#000
+    style J fill:#87CEEB,stroke:#333,color:#000
+    style K fill:#DDA0DD,stroke:#333,color:#000
+    style L fill:#FF6347,stroke:#333,color:#000
+    style M fill:#98FB98,stroke:#333,color:#000
+    style N fill:#FFE4C4,stroke:#333,color:#000
+```
 
 #### Error Handling & Observability
 1. **Error Management**
@@ -159,6 +339,27 @@ Two-tiered search approach:
    - Transactional writes for data consistency
    - Bulk insert operations for seeding efficiency
    - Conflict resolution for duplicate prevention
+
+##### Data Seeding Flow
+```mermaid
+graph LR
+    A[PokeAPI] --> B[Fetch Script]
+    B --> C[Data Validation]
+    C --> D[Data Transformation]
+    D --> E[Bulk Insert]
+    E --> F[PostgreSQL Database]
+    D --> G[Redis Cache]
+    G --> H[Cache Invalidation]
+    
+    style A fill:#FFA07A,stroke:#333,color:#000
+    style B fill:#87CEFA,stroke:#333,color:#000
+    style C fill:#98FB98,stroke:#333,color:#000
+    style D fill:#FFB6C1,stroke:#333,color:#000
+    style E fill:#DDA0DD,stroke:#333,color:#000
+    style F fill:#FFE4C4,stroke:#333,color:#000
+    style G fill:#87CEEB,stroke:#333,color:#000
+    style H fill:#FF6347,stroke:#333,color:#000
+```
 
 ### Key Features Implementation
 
