@@ -1,11 +1,8 @@
-import dotenv from 'dotenv';
+import './config/env';
 import app from './app';
 import { syncDatabase } from './models';
 import { logger } from './middlewares/requestLogger.middleware';
 import { startScheduledTasks } from './scripts/cronScheduler';
-
-// Load environment variables
-dotenv.config();
 
 // Get port from environment variables or default to 3000
 const PORT = process.env.PORT || 3000;
