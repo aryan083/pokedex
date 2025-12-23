@@ -1,7 +1,5 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import fs from 'fs';
-import path from 'path';
 import { syncDatabase, Pokemon } from '../models';
 import { logger } from '../middlewares/requestLogger.middleware';
 
@@ -100,62 +98,6 @@ const fetchPokemonDetails = async (limit: number = 151): Promise<any[]> => {
           ...types,
           Object.keys(stats).map(key => `${key}:${stats[key]}`)
         ].join(' ');
-        
-        // Download and save images
-        const imagesDir = path.join(__dirname, '../../images');
-        const spritesDir = path.join(imagesDir, 'sprites');
-        const artworkDir = path.join(imagesDir, 'artwork');
-        
-        // Ensure directories exist
-        if (!fs.existsSync(imagesDir)) {
-          fs.mkdirSync(imagesDir, { recursive: true });
-        }
-        if (!fs.existsSync(spritesDir)) {
-          fs.mkdirSync(spritesDir, { recursive: true });
-        }
-        if (!fs.existsSync(artworkDir)) {
-          fs.mkdirSync(artworkDir, { recursive: true });
-        }
-        
-        // Download sprite image
-        const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${detail.id}.png`;
-        const spritePath = path.join(spritesDir, `${detail.id}.png`);
-        
-        try {
-          const spriteResponse = await axios.get(spriteUrl, { responseType: 'stream' });
-          const spriteWriter = fs.createWriteStream(spritePath);
-          spriteResponse.data.pipe(spriteWriter);
-          
-          // Wait for the download to complete
-          await new Promise<void>((resolve, reject) => {
-            spriteWriter.on('finish', () => resolve());
-            spriteWriter.on('error', reject);
-          });
-          
-          logger.info(`Downloaded sprite for ${detail.name}`);
-        } catch (imgError: any) {
-          logger.error(`Error downloading sprite for ${detail.name}: ${imgError.message}`);
-        }
-        
-        // Download artwork image
-        const artworkUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${detail.id}.png`;
-        const artworkPath = path.join(artworkDir, `${detail.id}.png`);
-        
-        try {
-          const artworkResponse = await axios.get(artworkUrl, { responseType: 'stream' });
-          const artworkWriter = fs.createWriteStream(artworkPath);
-          artworkResponse.data.pipe(artworkWriter);
-          
-          // Wait for the download to complete
-          await new Promise<void>((resolve, reject) => {
-            artworkWriter.on('finish', () => resolve());
-            artworkWriter.on('error', reject);
-          });
-          
-          logger.info(`Downloaded artwork for ${detail.name}`);
-        } catch (imgError: any) {
-          logger.error(`Error downloading artwork for ${detail.name}: ${imgError.message}`);
-        }
         
         pokemonData.push({
           pokemonId: detail.id,

@@ -46,9 +46,8 @@ interface SearchParams {
 function transformPokemon(data: BackendPokemon): Pokemon {
   // Generate placeholder images using the Pokemon ID
   const pokemonId = data.pokemonId;
-  const baseUrl = BACKEND_API_BASE.replace('/api', '');
-  const spriteUrl = `${baseUrl}/images/sprites/${pokemonId}.png`;
-  const artworkUrl = `${baseUrl}/images/artwork/${pokemonId}.png`;
+  const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`;
+  const artworkUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`;
   
   return {
     id: data.pokemonId,

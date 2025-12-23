@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import './config/env';
-import path from 'path';
 import { httpLogger } from './middlewares/requestLogger.middleware';
 import { errorHandler } from './middlewares/error.middleware';
 import pokemonRoutes from './routes/pokemon.routes';
@@ -127,10 +126,6 @@ app.get('/health', (req, res) => {
     version: '1.0.0'
   });
 });
-
-// Serve Pokémon images
-app.use('/images/sprites', express.static(path.join(__dirname, '../images/sprites')));
-app.use('/images/artwork', express.static(path.join(__dirname, '../images/artwork')));
 
 app.get('/healthz', (req, res) => {
   res.status(200).json({

@@ -16,6 +16,9 @@ dist/
 build/
 *.tsbuildinfo
 
+# Vite timestamp artifacts
+frontend/vite.config.ts.timestamp-*.mjs
+
 # IDE
 .vscode/
 .idea/
