@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+import './config/env';
 import path from 'path';
 import { httpLogger } from './middlewares/requestLogger.middleware';
 import { errorHandler } from './middlewares/error.middleware';
@@ -11,9 +11,6 @@ import { PokemonRepositoryImpl } from './repositories/pokemon.repository';
 import { SearchService } from './services/search.service';
 import { RedisCache } from './cache/redisCache';
 import { logger } from './middlewares/requestLogger.middleware';
-
-// Load environment variables
-dotenv.config();
 
 // Create Express app
 const app = express();
@@ -93,6 +90,16 @@ app.get('/health', (req, res) => {
 // Serve Pokémon images
 app.use('/images/sprites', express.static(path.join(__dirname, '../images/sprites')));
 app.use('/images/artwork', express.static(path.join(__dirname, '../images/artwork')));
+
+app.get('/healthz', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0'
+  });
+});
 
 // Error handling middleware (should be last)
 app.use(errorHandler);

@@ -1,5 +1,5 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { DataTypes, Model, Optional } from "sequelize";
+import { sequelize } from "../config/database";
 
 // Define the attributes for the Pokemon model
 interface PokemonAttributes {
@@ -17,13 +17,21 @@ interface PokemonAttributes {
   types: string[];
   abilities: string[];
   searchText: string;
+  nameEmbedding?: number[];
+  typeEmbedding?: number[];
+  descriptionEmbedding?: number[];
+  combinedEmbedding?: number[];
 }
 
 // Define the creation attributes (some fields may be optional during creation)
-interface PokemonCreationAttributes extends Optional<PokemonAttributes, 'pokemonId'> {}
+interface PokemonCreationAttributes
+  extends Optional<PokemonAttributes, "pokemonId"> {}
 
 // Define the Pokemon model class
-class Pokemon extends Model<PokemonAttributes, PokemonCreationAttributes> implements PokemonAttributes {
+class Pokemon
+  extends Model<PokemonAttributes, PokemonCreationAttributes>
+  implements PokemonAttributes
+{
   public pokemonId!: number;
   public name!: string;
   public generation!: number;
@@ -38,6 +46,10 @@ class Pokemon extends Model<PokemonAttributes, PokemonCreationAttributes> implem
   public types!: string[];
   public abilities!: string[];
   public searchText!: string;
+  public nameEmbedding?: number[];
+  public typeEmbedding?: number[];
+  public descriptionEmbedding?: number[];
+  public combinedEmbedding?: number[];
 
   // Timestamps
   public readonly createdAt!: Date;
@@ -107,32 +119,48 @@ Pokemon.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    nameEmbedding: {
+      type: "vector(384)",
+      allowNull: true,
+    },
+    typeEmbedding: {
+      type: "vector(384)",
+      allowNull: true,
+    },
+    descriptionEmbedding: {
+      type: "vector(384)",
+      allowNull: true,
+    },
+    combinedEmbedding: {
+      type: "vector(384)",
+      allowNull: true,
+    },
   },
   {
     sequelize,
-    modelName: 'Pokemon',
-    tableName: 'pokemons',
+    modelName: "Pokemon",
+    tableName: "pokemons",
     indexes: [
       {
-        fields: ['name'],
+        fields: ["name"],
       },
       {
-        fields: ['generation'],
+        fields: ["generation"],
       },
       {
-        fields: ['types'],
+        fields: ["types"],
       },
       {
-        fields: ['hp'],
+        fields: ["hp"],
       },
       {
-        fields: ['attack'],
+        fields: ["attack"],
       },
       {
-        fields: ['defense'],
+        fields: ["defense"],
       },
       {
-        fields: ['speed'],
+        fields: ["speed"],
       },
     ],
   }

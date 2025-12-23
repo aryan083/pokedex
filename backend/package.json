@@ -18,9 +18,11 @@
     "fetch-seed": "ts-node src/scripts/fetchAndSeed.ts",
     "update-fields": "ts-node src/scripts/updateMissingFields.ts",
     "update-pokemon": "ts-node src/scripts/improvedPokemonUpdater.ts",
-        "load-pokemon": "ts-node src/scripts/loadPokemonData.ts",
+    "load-pokemon": "ts-node src/scripts/loadPokemonData.ts",
     "test-api": "ts-node src/scripts/testApi.ts",
-    "test-signoz": "ts-node src/scripts/testBackendWithSigNoz.ts"
+    "test-signoz": "ts-node src/scripts/testBackendWithSigNoz.ts",
+    "generate-embeddings": "ts-node src/scripts/generateEmbeddings.ts",
+    "test-vector-search": "ts-node src/scripts/testVectorSearch.ts"
   },
   "keywords": [
     "pokemon",
@@ -34,6 +36,7 @@
   "author": "Intern Developer Assessment",
   "license": "MIT",
   "dependencies": {
+    "@huggingface/inference": "^2.8.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.67.3",
     "@opentelemetry/exporter-metrics-otlp-grpc": "^0.208.0",

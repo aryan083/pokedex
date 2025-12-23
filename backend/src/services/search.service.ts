@@ -1,6 +1,11 @@
-import { PokemonFilters, SortField, SortOrder } from '../repositories/pokemon.repository';
-import { RedisCache } from '../cache/redisCache';
-import { logger } from '../middlewares/requestLogger.middleware';
+import {
+  PokemonFilters,
+  SortField,
+  SortOrder,
+} from "../repositories/pokemon.repository";
+import { RedisCache } from "../cache/redisCache";
+import { logger } from "../middlewares/requestLogger.middleware";
+import { SemanticSearchService } from "./semantic.service";
 
 export interface SearchParams {
   page?: number;
@@ -18,9 +23,11 @@ export interface SearchParams {
 
 export class SearchService {
   private cache: RedisCache;
+  private semanticService: SemanticSearchService;
 
   constructor(cache: RedisCache) {
     this.cache = cache;
+    this.semanticService = new SemanticSearchService();
   }
 
   // Generate cache key for search queries
@@ -35,35 +42,88 @@ export class SearchService {
       minDefense,
       minSpeed,
       search,
-      sortBy = 'pokemonId',
-      sortOrder = 'ASC'
+      sortBy = "pokemonId",
+      sortOrder = "ASC",
     } = params;
 
-    return `search:${page}:${limit}:${type || ''}:${generation || ''}:${minHp || ''}:${minAttack || ''}:${minDefense || ''}:${minSpeed || ''}:${search || ''}:${sortBy}:${sortOrder}`;
+    return `search:${page}:${limit}:${type || ""}:${generation || ""}:${
+      minHp || ""
+    }:${minAttack || ""}:${minDefense || ""}:${minSpeed || ""}:${
+      search || ""
+    }:${sortBy}:${sortOrder}`;
   }
 
-  // Parse semantic terms in search query
-  parseSemanticSearch(searchTerm: string): PokemonFilters {
-    const term = searchTerm.toLowerCase().trim();
-    const filters: PokemonFilters = {};
-
-    switch (term) {
-      case 'fast':
-        filters.minSpeed = 100;
-        break;
-      case 'tank':
-        // This will be handled in the repository with a special filter
-        filters.search = 'tank';
-        break;
-      case 'glass':
-        filters.minAttack = 100;
-        filters.minDefense = undefined; // Will be set to < 70 in repository
-        break;
-      default:
-        filters.search = searchTerm;
+  // Enhanced semantic search parsing
+  parseSemanticSearch(searchTerm: string): {
+    primaryFilters: PokemonFilters;
+    fallbackFilters: PokemonFilters;
+    hasSemanticIntent: boolean;
+  } {
+    if (!searchTerm || !searchTerm.trim()) {
+      return {
+        primaryFilters: {},
+        fallbackFilters: {},
+        hasSemanticIntent: false,
+      };
     }
 
-    return filters;
+    // Use the semantic service to analyze the query
+    const semanticAnalysis =
+      this.semanticService.parseSemanticQuery(searchTerm);
+    this.semanticService.logSemanticAnalysis(semanticAnalysis);
+
+    const semanticFilters =
+      this.semanticService.generateSemanticFilters(semanticAnalysis);
+
+    // Build primary filters (exact + semantic)
+    const primaryFilters: PokemonFilters = {};
+
+    // Add semantic characteristics
+    if (semanticFilters.characteristics) {
+      Object.assign(primaryFilters, semanticFilters.characteristics);
+    }
+
+    // Add semantic types
+    if (semanticFilters.types && semanticFilters.types.length > 0) {
+      primaryFilters.types = semanticFilters.types;
+    }
+
+    // Add text search
+    if (semanticFilters.textSearch) {
+      primaryFilters.search = semanticFilters.textSearch;
+    }
+
+    // Build fallback filters (semantic only, no text)
+    const fallbackFilters: PokemonFilters = {};
+
+    // Add fallback types
+    if (
+      semanticFilters.fallbackTypes &&
+      semanticFilters.fallbackTypes.length > 0
+    ) {
+      fallbackFilters.types = semanticFilters.fallbackTypes;
+    }
+
+    // Add characteristics to fallback too
+    if (semanticFilters.characteristics) {
+      Object.assign(fallbackFilters, semanticFilters.characteristics);
+    }
+
+    const hasSemanticIntent = semanticAnalysis.semanticMatches.length > 0;
+
+    logger.info(
+      `Search filters generated for query "${searchTerm}": primary=${JSON.stringify(
+        primaryFilters
+      )}, fallback=${JSON.stringify(
+        fallbackFilters
+      )}, hasSemanticIntent=${hasSemanticIntent}`
+    );
+
+    return {
+      primaryFilters,
+      fallbackFilters,
+      hasSemanticIntent,
+    };
   }
 
   // Get cached search results
@@ -91,19 +151,32 @@ export class SearchService {
       minDefense: params.minDefense,
       minSpeed: params.minSpeed,
       search: params.search,
-      sortBy: params.sortBy || 'pokemonId',
-      sortOrder: params.sortOrder || 'ASC'
+      sortBy: params.sortBy || "pokemonId",
+      sortOrder: params.sortOrder || "ASC",
     };
 
     // Ensure sort field is valid
-    const validSortFields: SortField[] = ['pokemonId', 'name', 'hp', 'attack', 'defense', 'speed'];
-    if (validatedParams.sortBy && !validSortFields.includes(validatedParams.sortBy)) {
-      validatedParams.sortBy = 'pokemonId';
+    const validSortFields: SortField[] = [
+      "pokemonId",
+      "name",
+      "hp",
+      "attack",
+      "defense",
+      "speed",
+    ];
+    if (
+      validatedParams.sortBy &&
+      !validSortFields.includes(validatedParams.sortBy)
+    ) {
+      validatedParams.sortBy = "pokemonId";
     }
 
     // Ensure sort order is valid
-    if (validatedParams.sortOrder && !['ASC', 'DESC'].includes(validatedParams.sortOrder)) {
-      validatedParams.sortOrder = 'ASC';
+    if (
+      validatedParams.sortOrder &&
+      !["ASC", "DESC"].includes(validatedParams.sortOrder)
+    ) {
+      validatedParams.sortOrder = "ASC";
     }
 
     return validatedParams;
